@@ -2,26 +2,23 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <title>哲學聊天室</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Philo Meet</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="room-container">
-    <h2>加入聊天室</h2>
-    <input type="text" id="username" placeholder="請輸入你的名字" />
-    <input type="text" id="room" placeholder="請輸入房間代碼" />
-    <button id="join-btn">加入</button>
+  <div style="text-align:center; margin-top:1rem;">
+    <h2>Philo Meet 即時聊天室</h2>
+    <input id="username" class="input" placeholder="輸入你的暱稱" />
+    <button onclick="joinChat()" class="btn">加入聊天室</button>
   </div>
 
-  <div id="chat-container" class="hidden">
-    <div id="chat-header">
-      <h3 id="room-name">聊天室</h3>
-      <button id="leave-btn">離開</button>
-    </div>
-    <div id="chat-box"></div>
-    <div id="input-area">
-      <input type="text" id="message" placeholder="輸入訊息..." />
-      <button id="send-btn">送出</button>
+  <div id="chatArea" style="display:none;">
+    <div class="chat-container">
+      <div id="userList"><strong>使用者列表：</strong></div>
+      <div id="chatBox" class="chat-box"></div>
+      <input id="chatInput" class="chat-input" placeholder="輸入訊息..." />
+      <button onclick="sendMessage()" class="btn">送出</button>
     </div>
   </div>
 

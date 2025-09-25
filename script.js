@@ -1,48 +1,34 @@
-const socket = io();
+let socket;
+let username = "";
 
-const joinBtn = document.getElementById('join-btn');
-const leaveBtn = document.getElementById('leave-btn');
-const sendBtn = document.getElementById('send-btn');
-const usernameInput = document.getElementById('username');
-const roomInput = document.getElementById('room');
-const messageInput = document.getElementById('message');
-const chatBox = document.getElementById('chat-box');
-const roomContainer = document.getElementById('room-container');
-const chatContainer = document.getElementById('chat-container');
-const roomNameDisplay = document.getElementById('room-name');
+function joinChat() {
+  username = document.getElementById("username").value.trim();
+  if (!username) return alert("請輸入暱稱");
 
-let currentRoom = '';
-let username = '';
+  document.getElementById("chatArea").style.display = "block";
+  document.getElementById("username").style.display = "none";
+  socket = io();
+  socket.emit("join", username);
 
-joinBtn.addEventListener('click', () => {
-  username = usernameInput.value.trim();
-  currentRoom = roomInput.value.trim();
-  if (username && currentRoom) {
-    socket.emit('joinRoom', { username, room: currentRoom });
-    roomContainer.classList.add('hidden');
-    chatContainer.classList.remove('hidden');
-    roomNameDisplay.textContent = '聊天室：' + currentRoom;
+  socket.on("chat message", ({ user, message }) => {
+    const box = document.getElementById("chatBox");
+    const msgDiv = document.createElement("div");
+    msgDiv.innerHTML = "<strong>" + user + ":</strong> " + message;
+    box.appendChild(msgDiv);
+    box.scrollTop = box.scrollHeight;
+  });
+
+  socket.on("user list", users => {
+    document.getElementById("userList").innerHTML =
+      "<strong>使用者列表：</strong> " + users.join(", ");
+  });
+}
+
+function sendMessage() {
+  const input = document.getElementById("chatInput");
+  const message = input.value.trim();
+  if (message) {
+    socket.emit("chat message", message);
+    input.value = "";
   }
-});
-
-leaveBtn.addEventListener('click', () => {
-  socket.emit('leaveRoom', { username, room: currentRoom });
-  chatBox.innerHTML = '';
-  chatContainer.classList.add('hidden');
-  roomContainer.classList.remove('hidden');
-});
-
-sendBtn.addEventListener('click', () => {
-  const msg = messageInput.value.trim();
-  if (msg) {
-    socket.emit('chatMessage', { room: currentRoom, username, message: msg });
-    messageInput.value = '';
-  }
-});
-
-socket.on('message', (data) => {
-  const msgDiv = document.createElement('div');
-  msgDiv.textContent = `${data.username}：${data.message}`;
-  chatBox.appendChild(msgDiv);
-  chatBox.scrollTop = chatBox.scrollHeight;
-});
+}
