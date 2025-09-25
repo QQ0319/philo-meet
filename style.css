@@ -1,100 +1,28 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  background-color: #fff0f5;
-  color: #444;
+.input {
+  padding: 0.5rem;
+  border: 2px solid #f472b6;
+  border-radius: 0.5rem;
+  width: 200px;
 }
-
-#login-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+.btn {
+  background-color: #ec4899;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
 }
-
-#login-screen input, #login-screen button {
-  margin: 8px;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #f0a;
+.chat-container {
+  background: #fff0f6;
+  border-top: 2px solid #f472b6;
+  padding: 0.5rem;
 }
-
-button {
-  background-color: #ffc0cb;
-  border: none;
-  cursor: pointer;
-}
-
-#main {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-}
-
-#video-grid {
-  flex: 3;
-  display: flex;
-  flex-direction: column;
-}
-
-#main-video-container {
-  flex: 2;
-  position: relative;
-  background-color: #000;
-}
-
-#main-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-#thumbnails {
-  flex: 1;
-  display: flex;
-  overflow-x: auto;
-  background: #ffeef5;
-}
-
-#thumbnails video {
-  width: 150px;
-  height: 100px;
-  margin: 8px;
-  border-radius: 10px;
-  border: 2px solid #f99;
-  cursor: pointer;
-}
-
-#sidebar {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  border-left: 2px solid #ffc0cb;
-  background: #fff5f8;
-}
-
-#chat {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-}
-
-#messages {
-  flex: 1;
+.chat-box {
+  height: 150px;
   overflow-y: auto;
-  padding: 10px;
+  margin-bottom: 0.5rem;
 }
-
-#message-input {
-  padding: 10px;
-}
-
-#user-list {
-  flex: 1;
-  padding: 10px;
-}
-
-.hidden {
-  display: none;
+.chat-input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid #f472b6;
 }

@@ -1,37 +1,47 @@
-const express = require('express');
-const { createServer } = require('http');
-const { Server } = require('socket.io');
-const { ExpressPeerServer } = require('peer');
-
+const express = require("express");
 const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer);
-const peerServer = ExpressPeerServer(httpServer, { debug: true });
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
+const PORT = process.env.PORT || 3000;
 
-app.use('/peerjs', peerServer);
-app.use(express.static('.'));
+app.use(express.static("public"));
 
-const users = {};
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
 
-io.on('connection', socket => {
-  socket.on('join-room', (roomId, userId, name) => {
+  socket.on("join-room", ({ roomId, userName }) => {
     socket.join(roomId);
-    if (!users[roomId]) users[roomId] = [];
-    users[roomId].push({ id: userId, name });
-    io.to(roomId).emit('user-connected', userId, name);
-    io.to(roomId).emit('user-list', users[roomId]);
+    socket.data.userName = userName;
+    const clients = [...io.sockets.adapter.rooms.get(roomId) || []];
+    const users = clients.map(id => ({
+      id,
+      userName: io.sockets.sockets.get(id)?.data.userName || "User"
+    }));
+    io.to(roomId).emit("users-update", users);
+    socket.to(roomId).emit("user-joined", { id: socket.id, userName });
+  });
 
-    socket.on('send-message', (roomId, msg) => {
-      io.to(roomId).emit('chat-message', { name, message: msg });
-    });
+  socket.on("offer", (data) => {
+    socket.to(data.to).emit("offer", { from: socket.id, sdp: data.sdp });
+  });
 
-    socket.on('disconnect', () => {
-      users[roomId] = users[roomId].filter(u => u.id !== userId);
-      io.to(roomId).emit('user-list', users[roomId]);
-    });
+  socket.on("answer", (data) => {
+    socket.to(data.to).emit("answer", { from: socket.id, sdp: data.sdp });
+  });
+
+  socket.on("ice-candidate", (data) => {
+    socket.to(data.to).emit("ice-candidate", { from: socket.id, candidate: data.candidate });
+  });
+
+  socket.on("mute-user", (data) => {
+    socket.to(data.to).emit("force-mute");
+  });
+
+  socket.on("disconnect", () => {
+    io.emit("user-left", socket.id);
   });
 });
 
-httpServer.listen(3000, () => {
-  console.log('Server running on http://localhost:3000');
+http.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

@@ -1,47 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Philo Meet - 可愛粉紅視訊會議</title>
+  <title>Philo-Meet</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <div id="login-screen">
-    <h1>Philo Meet 🌸</h1>
-    <input id="username" placeholder="輸入暱稱" />
-    <input id="room" placeholder="房間代碼" />
-    <button onclick="joinRoom()">加入會議</button>
+<body class="bg-pink-50">
+  <div id="join-screen" class="flex flex-col items-center justify-center h-screen">
+    <h1 class="text-4xl font-bold mb-4 text-pink-600">🌸 Philo-Meet</h1>
+    <input id="userName" placeholder="輸入你的暱稱" class="input mb-2" />
+    <input id="roomId" placeholder="輸入房間代碼" class="input mb-2" />
+    <button id="joinBtn" class="btn">加入會議</button>
   </div>
 
-  <div id="main" class="hidden">
-    <div id="video-grid">
-      <div id="main-video-container">
-        <video id="main-video" autoplay playsinline></video>
-        <p id="main-username"></p>
-      </div>
-      <div id="thumbnails"></div>
-    </div>
-    <div id="controls">
-      <button id="mute-btn">🎤 靜音</button>
-      <button id="share-btn">🖥️ 分享畫面</button>
-      <button id="leave-btn">❌ 離開</button>
-    </div>
-    <div id="sidebar">
-      <div id="chat">
-        <div id="messages"></div>
-        <input id="message-input" placeholder="輸入訊息..." />
-        <button onclick="sendMessage()">送出</button>
-      </div>
-      <div id="user-list">
-        <h3>參與者</h3>
-        <ul id="users"></ul>
+  <div id="meeting-screen" class="hidden h-screen">
+    <div class="flex flex-col h-full">
+      <div class="flex-1 grid grid-cols-2 gap-2 p-4" id="videos"></div>
+      <div class="chat-container">
+        <div id="chat-box" class="chat-box"></div>
+        <input id="chat-input" placeholder="輸入訊息..." class="chat-input" />
       </div>
     </div>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
-  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
