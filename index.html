@@ -2,26 +2,26 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Philo-Meet</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>哲學聊天室</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="bg-pink-50">
-  <div id="join-screen" class="flex flex-col items-center justify-center h-screen">
-    <h1 class="text-4xl font-bold mb-4 text-pink-600">🌸 Philo-Meet</h1>
-    <input id="userName" placeholder="輸入你的暱稱" class="input mb-2" />
-    <input id="roomId" placeholder="輸入房間代碼" class="input mb-2" />
-    <button id="joinBtn" class="btn">加入會議</button>
+<body>
+  <div id="room-container">
+    <h2>加入聊天室</h2>
+    <input type="text" id="username" placeholder="請輸入你的名字" />
+    <input type="text" id="room" placeholder="請輸入房間代碼" />
+    <button id="join-btn">加入</button>
   </div>
 
-  <div id="meeting-screen" class="hidden h-screen">
-    <div class="flex flex-col h-full">
-      <div class="flex-1 grid grid-cols-2 gap-2 p-4" id="videos"></div>
-      <div class="chat-container">
-        <div id="chat-box" class="chat-box"></div>
-        <input id="chat-input" placeholder="輸入訊息..." class="chat-input" />
-      </div>
+  <div id="chat-container" class="hidden">
+    <div id="chat-header">
+      <h3 id="room-name">聊天室</h3>
+      <button id="leave-btn">離開</button>
+    </div>
+    <div id="chat-box"></div>
+    <div id="input-area">
+      <input type="text" id="message" placeholder="輸入訊息..." />
+      <button id="send-btn">送出</button>
     </div>
   </div>
 

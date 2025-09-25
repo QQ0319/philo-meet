@@ -1,7 +1,6 @@
 {
-  "name": "philo-meet",
+  "name": "chatroom-app",
   "version": "1.0.0",
-  "description": "A lightweight 5-person online meeting app built with WebRTC and Socket.io",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
