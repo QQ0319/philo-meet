@@ -1,0 +1,28 @@
+.input {
+  padding: 0.5rem;
+  border: 2px solid #f472b6;
+  border-radius: 0.5rem;
+  width: 200px;
+}
+.btn {
+  background-color: #ec4899;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+.chat-container {
+  background: #fff0f6;
+  border-top: 2px solid #f472b6;
+  padding: 0.5rem;
+}
+.chat-box {
+  height: 150px;
+  overflow-y: auto;
+  margin-bottom: 0.5rem;
+}
+.chat-input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid #f472b6;
+}
