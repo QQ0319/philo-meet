@@ -1,30 +1,45 @@
-.input {
-  padding: 0.5rem;
-  border: 2px solid #f472b6;
-  border-radius: 0.5rem;
-  width: 200px;
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: #fff0f5;
+  color: #444;
+  margin: 0;
+  padding: 0;
 }
-.btn {
-  background-color: #ec4899;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+h1 { text-align: center; color: #e91e63; }
+#login-screen, #main-app { padding: 1em; }
+input, button {
+  display: block;
+  margin: 0.5em auto;
+  padding: 0.5em;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 1em;
 }
-.chat-container {
-  background: #fff0f6;
-  border-top: 2px solid #f472b6;
-  padding: 0.5rem;
+button {
+  background: #f8bbd0;
+  color: #fff;
+  border: none;
+  cursor: pointer;
 }
-.chat-box {
-  height: 150px;
-  overflow-y: auto;
-  margin-bottom: 0.5rem;
-  border: 1px solid #f472b6;
-  padding: 0.5rem;
+button:hover { background: #ec407a; }
+.hidden { display: none; }
+#video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1em; }
+video { width: 100%; border-radius: 10px; }
+#sidebar {
+  position: fixed;
+  top: 1em;
+  right: 1em;
+  width: 250px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  padding: 1em;
 }
-.chat-input {
-  width: 70%;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: 2px solid #f472b6;
+#tabs button {
+  display: inline-block;
+  width: 30%;
+  margin: 0.2em;
+  background: #f48fb1;
 }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }

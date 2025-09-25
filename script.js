@@ -1,34 +1,53 @@
-let socket;
-let username = "";
+const socket = io();
+let localStream;
+let peers = {};
+let username = '';
+let room = '';
 
-function joinChat() {
-  username = document.getElementById("username").value.trim();
-  if (!username) return alert("請輸入暱稱");
-
-  document.getElementById("chatArea").style.display = "block";
-  document.getElementById("username").style.display = "none";
-  socket = io();
-  socket.emit("join", username);
-
-  socket.on("chat message", ({ user, message }) => {
-    const box = document.getElementById("chatBox");
-    const msgDiv = document.createElement("div");
-    msgDiv.innerHTML = "<strong>" + user + ":</strong> " + message;
-    box.appendChild(msgDiv);
-    box.scrollTop = box.scrollHeight;
-  });
-
-  socket.on("user list", users => {
-    document.getElementById("userList").innerHTML =
-      "<strong>使用者列表：</strong> " + users.join(", ");
+function joinRoom() {
+  username = document.getElementById('username').value;
+  room = document.getElementById('room').value;
+  if (!username || !room) return alert('請輸入暱稱和房間代碼');
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('main-app').classList.remove('hidden');
+  navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+    localStream = stream;
+    const video = document.createElement('video');
+    video.srcObject = stream;
+    video.autoplay = true;
+    document.getElementById('video-grid').appendChild(video);
+    socket.emit('join', { username, room });
   });
 }
 
-function sendMessage() {
-  const input = document.getElementById("chatInput");
-  const message = input.value.trim();
-  if (message) {
-    socket.emit("chat message", message);
-    input.value = "";
+socket.on('user-joined', ({ id, username }) => {
+  const msg = document.createElement('div');
+  msg.textContent = `${username} 加入了房間`;
+  document.getElementById('system').appendChild(msg);
+});
+
+function sendMessage(e) {
+  if (e.key === 'Enter') {
+    const msg = e.target.value;
+    if (msg) {
+      socket.emit('chat', { username, room, msg });
+      appendMessage(`${username}：${msg}`);
+      e.target.value = '';
+    }
   }
+}
+
+function appendMessage(text) {
+  const msg = document.createElement('div');
+  msg.textContent = text;
+  document.getElementById('messages').appendChild(msg);
+}
+
+socket.on('chat', ({ username, msg }) => {
+  appendMessage(`${username}：${msg}`);
+});
+
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }

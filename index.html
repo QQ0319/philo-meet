@@ -7,18 +7,32 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div style="text-align:center; margin-top:1rem;">
-    <h2>Philo Meet 即時聊天室</h2>
-    <input id="username" class="input" placeholder="輸入你的暱稱" />
-    <button onclick="joinChat()" class="btn">加入聊天室</button>
+  <div id="login-screen">
+    <h1>🎀 Philo Meet</h1>
+    <input id="username" placeholder="輸入你的暱稱"/>
+    <input id="room" placeholder="房間代碼"/>
+    <button onclick="joinRoom()">加入</button>
   </div>
 
-  <div id="chatArea" style="display:none;">
-    <div class="chat-container">
-      <div id="userList"><strong>使用者列表：</strong></div>
-      <div id="chatBox" class="chat-box"></div>
-      <input id="chatInput" class="chat-input" placeholder="輸入訊息..." />
-      <button onclick="sendMessage()" class="btn">送出</button>
+  <div id="main-app" class="hidden">
+    <div id="video-grid"></div>
+    <div id="controls">
+      <button onclick="toggleMic()">🎤 靜音</button>
+      <button onclick="toggleCam()">📷 相機</button>
+      <button onclick="shareScreen()">🖥️ 共享畫面</button>
+    </div>
+    <div id="sidebar">
+      <div id="tabs">
+        <button onclick="showTab('users')">👥 使用者</button>
+        <button onclick="showTab('chat')">💬 聊天</button>
+        <button onclick="showTab('system')">🔔 系統</button>
+      </div>
+      <div id="users" class="tab-panel"></div>
+      <div id="chat" class="tab-panel hidden">
+        <div id="messages"></div>
+        <input id="chat-input" placeholder="輸入訊息" onkeydown="sendMessage(event)" />
+      </div>
+      <div id="system" class="tab-panel hidden"></div>
     </div>
   </div>
 

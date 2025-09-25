@@ -1,30 +1,19 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const http = require("http").createServer(app);
-const io = require("socket.io")(http);
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+const PORT = process.env.PORT || 3000;
 
-app.use(express.static("."));
+app.use(express.static(__dirname));
 
-const users = {};
-
-io.on("connection", (socket) => {
-  socket.on("join", (username) => {
-    users[socket.id] = username;
-    io.emit("user list", Object.values(users));
+io.on('connection', socket => {
+  socket.on('join', ({ username, room }) => {
+    socket.join(room);
+    socket.to(room).emit('user-joined', { id: socket.id, username });
   });
-
-  socket.on("chat message", (msg) => {
-    const user = users[socket.id] || "匿名";
-    io.emit("chat message", { user, message: msg });
-  });
-
-  socket.on("disconnect", () => {
-    delete users[socket.id];
-    io.emit("user list", Object.values(users));
+  socket.on('chat', ({ username, room, msg }) => {
+    io.to(room).emit('chat', { username, msg });
   });
 });
 
-const PORT = 3000;
-http.listen(PORT, () => {
-  console.log("伺服器啟動於 http://localhost:" + PORT);
-});
+http.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
