@@ -1,19 +1,37 @@
 const express = require('express');
-const app = express();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
-const PORT = process.env.PORT || 3000;
+const { createServer } = require('http');
+const { Server } = require('socket.io');
+const { ExpressPeerServer } = require('peer');
 
-app.use(express.static(__dirname));
+const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+const peerServer = ExpressPeerServer(httpServer, { debug: true });
+
+app.use('/peerjs', peerServer);
+app.use(express.static('.'));
+
+const users = {};
 
 io.on('connection', socket => {
-  socket.on('join', ({ username, room }) => {
-    socket.join(room);
-    socket.to(room).emit('user-joined', { id: socket.id, username });
-  });
-  socket.on('chat', ({ username, room, msg }) => {
-    io.to(room).emit('chat', { username, msg });
+  socket.on('join-room', (roomId, userId, name) => {
+    socket.join(roomId);
+    if (!users[roomId]) users[roomId] = [];
+    users[roomId].push({ id: userId, name });
+    io.to(roomId).emit('user-connected', userId, name);
+    io.to(roomId).emit('user-list', users[roomId]);
+
+    socket.on('send-message', (roomId, msg) => {
+      io.to(roomId).emit('chat-message', { name, message: msg });
+    });
+
+    socket.on('disconnect', () => {
+      users[roomId] = users[roomId].filter(u => u.id !== userId);
+      io.to(roomId).emit('user-list', users[roomId]);
+    });
   });
 });
 
-http.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+httpServer.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});

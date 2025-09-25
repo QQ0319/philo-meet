@@ -1,42 +1,47 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Philo Meet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Philo Meet - 可愛粉紅視訊會議</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div id="login-screen">
-    <h1>🎀 Philo Meet</h1>
-    <input id="username" placeholder="輸入你的暱稱"/>
-    <input id="room" placeholder="房間代碼"/>
-    <button onclick="joinRoom()">加入</button>
+    <h1>Philo Meet 🌸</h1>
+    <input id="username" placeholder="輸入暱稱" />
+    <input id="room" placeholder="房間代碼" />
+    <button onclick="joinRoom()">加入會議</button>
   </div>
 
-  <div id="main-app" class="hidden">
-    <div id="video-grid"></div>
+  <div id="main" class="hidden">
+    <div id="video-grid">
+      <div id="main-video-container">
+        <video id="main-video" autoplay playsinline></video>
+        <p id="main-username"></p>
+      </div>
+      <div id="thumbnails"></div>
+    </div>
     <div id="controls">
-      <button onclick="toggleMic()">🎤 靜音</button>
-      <button onclick="toggleCam()">📷 相機</button>
-      <button onclick="shareScreen()">🖥️ 共享畫面</button>
+      <button id="mute-btn">🎤 靜音</button>
+      <button id="share-btn">🖥️ 分享畫面</button>
+      <button id="leave-btn">❌ 離開</button>
     </div>
     <div id="sidebar">
-      <div id="tabs">
-        <button onclick="showTab('users')">👥 使用者</button>
-        <button onclick="showTab('chat')">💬 聊天</button>
-        <button onclick="showTab('system')">🔔 系統</button>
-      </div>
-      <div id="users" class="tab-panel"></div>
-      <div id="chat" class="tab-panel hidden">
+      <div id="chat">
         <div id="messages"></div>
-        <input id="chat-input" placeholder="輸入訊息" onkeydown="sendMessage(event)" />
+        <input id="message-input" placeholder="輸入訊息..." />
+        <button onclick="sendMessage()">送出</button>
       </div>
-      <div id="system" class="tab-panel hidden"></div>
+      <div id="user-list">
+        <h3>參與者</h3>
+        <ul id="users"></ul>
+      </div>
     </div>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

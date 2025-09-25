@@ -1,45 +1,100 @@
 body {
-  font-family: 'Noto Sans TC', sans-serif;
-  background: #fff0f5;
-  color: #444;
+  font-family: 'Segoe UI', sans-serif;
   margin: 0;
-  padding: 0;
+  background-color: #fff0f5;
+  color: #444;
 }
-h1 { text-align: center; color: #e91e63; }
-#login-screen, #main-app { padding: 1em; }
-input, button {
-  display: block;
-  margin: 0.5em auto;
-  padding: 0.5em;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 1em;
+
+#login-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
+
+#login-screen input, #login-screen button {
+  margin: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #f0a;
+}
+
 button {
-  background: #f8bbd0;
-  color: #fff;
+  background-color: #ffc0cb;
   border: none;
   cursor: pointer;
 }
-button:hover { background: #ec407a; }
-.hidden { display: none; }
-#video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1em; }
-video { width: 100%; border-radius: 10px; }
-#sidebar {
-  position: fixed;
-  top: 1em;
-  right: 1em;
-  width: 250px;
-  background: #fff;
+
+#main {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+#video-grid {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+#main-video-container {
+  flex: 2;
+  position: relative;
+  background-color: #000;
+}
+
+#main-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#thumbnails {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  background: #ffeef5;
+}
+
+#thumbnails video {
+  width: 150px;
+  height: 100px;
+  margin: 8px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  padding: 1em;
+  border: 2px solid #f99;
+  cursor: pointer;
 }
-#tabs button {
-  display: inline-block;
-  width: 30%;
-  margin: 0.2em;
-  background: #f48fb1;
+
+#sidebar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid #ffc0cb;
+  background: #fff5f8;
 }
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
+
+#chat {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+#messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+#message-input {
+  padding: 10px;
+}
+
+#user-list {
+  flex: 1;
+  padding: 10px;
+}
+
+.hidden {
+  display: none;
+}

@@ -1,53 +1,97 @@
 const socket = io();
-let localStream;
+const videoGrid = document.getElementById('thumbnails');
+const mainVideo = document.getElementById('main-video');
+const mainUsername = document.getElementById('main-username');
+const messageInput = document.getElementById('message-input');
+const messages = document.getElementById('messages');
+const userList = document.getElementById('users');
+const muteBtn = document.getElementById('mute-btn');
+const shareBtn = document.getElementById('share-btn');
+
+let myVideoStream;
+let myPeer;
+let myId;
+let myName;
+let roomId;
 let peers = {};
-let username = '';
-let room = '';
+
+document.getElementById('leave-btn').onclick = () => location.reload();
 
 function joinRoom() {
-  username = document.getElementById('username').value;
-  room = document.getElementById('room').value;
-  if (!username || !room) return alert('請輸入暱稱和房間代碼');
+  myName = document.getElementById('username').value;
+  roomId = document.getElementById('room').value;
   document.getElementById('login-screen').classList.add('hidden');
-  document.getElementById('main-app').classList.remove('hidden');
+  document.getElementById('main').classList.remove('hidden');
+
+  myPeer = new Peer(undefined, {
+    host: '/',
+    port: location.port || (location.protocol === 'https:' ? 443 : 80),
+    path: '/peerjs'
+  });
+
+  myPeer.on('open', id => {
+    myId = id;
+    socket.emit('join-room', roomId, id, myName);
+  });
+
   navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-    localStream = stream;
-    const video = document.createElement('video');
-    video.srcObject = stream;
-    video.autoplay = true;
-    document.getElementById('video-grid').appendChild(video);
-    socket.emit('join', { username, room });
+    myVideoStream = stream;
+    addVideoStream(myId, stream, myName, true);
+
+    myPeer.on('call', call => {
+      call.answer(stream);
+      call.on('stream', userVideoStream => {
+        addVideoStream(call.peer, userVideoStream);
+      });
+    });
+
+    socket.on('user-connected', (userId, name) => {
+      const call = myPeer.call(userId, stream);
+      call.on('stream', userVideoStream => {
+        addVideoStream(userId, userVideoStream, name);
+      });
+    });
+  });
+
+  socket.on('chat-message', data => {
+    const el = document.createElement('div');
+    el.textContent = `${data.name}: ${data.message}`;
+    messages.appendChild(el);
+  });
+
+  socket.on('user-list', users => {
+    userList.innerHTML = '';
+    users.forEach(user => {
+      const li = document.createElement('li');
+      li.textContent = user.name;
+      userList.appendChild(li);
+    });
   });
 }
 
-socket.on('user-joined', ({ id, username }) => {
-  const msg = document.createElement('div');
-  msg.textContent = `${username} 加入了房間`;
-  document.getElementById('system').appendChild(msg);
-});
-
-function sendMessage(e) {
-  if (e.key === 'Enter') {
-    const msg = e.target.value;
-    if (msg) {
-      socket.emit('chat', { username, room, msg });
-      appendMessage(`${username}：${msg}`);
-      e.target.value = '';
-    }
+function sendMessage() {
+  const msg = messageInput.value;
+  if (msg) {
+    socket.emit('send-message', roomId, msg);
+    messageInput.value = '';
   }
 }
 
-function appendMessage(text) {
-  const msg = document.createElement('div');
-  msg.textContent = text;
-  document.getElementById('messages').appendChild(msg);
+function addVideoStream(id, stream, name = '', isSelf = false) {
+  if (document.getElementById(`video-${id}`)) return;
+
+  const video = document.createElement('video');
+  video.srcObject = stream;
+  video.autoplay = true;
+  video.playsInline = true;
+  video.id = `video-${id}`;
+  video.onclick = () => setMainVideo(stream, name);
+  videoGrid.appendChild(video);
+
+  if (isSelf) setMainVideo(stream, name);
 }
 
-socket.on('chat', ({ username, msg }) => {
-  appendMessage(`${username}：${msg}`);
-});
-
-function showTab(id) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+function setMainVideo(stream, name = '') {
+  mainVideo.srcObject = stream;
+  mainUsername.textContent = name;
 }
