@@ -1,7 +1,7 @@
 {
   "name": "philo-meet",
-  "version": "3.0.0",
-  "description": "A cute pink WebRTC video meeting app with chat, main screen toggle and animation.",
+  "version": "1.0.0",
+  "description": "哲學系專用視訊聊天室",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -9,10 +9,5 @@
   "dependencies": {
     "express": "^4.18.2",
     "socket.io": "^4.7.2"
-  },
-  "engines": {
-    "node": ">=16.0.0"
-  },
-  "author": "philo-meet",
-  "license": "MIT"
+  }
 }

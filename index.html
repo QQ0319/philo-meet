@@ -3,29 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Philo-Meet</title>
+  <title>Philo Meet</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script defer src="script.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <link href="style.css" rel="stylesheet">
 </head>
-<body class="bg-pink-50">
+<body class="bg-gray-100 text-gray-800">
   <div id="join-screen" class="flex flex-col items-center justify-center h-screen">
-    <h1 class="text-4xl font-bold mb-4 text-pink-600">🌸 Philo-Meet</h1>
-    <input id="userName" placeholder="輸入你的暱稱" class="input mb-2" />
-    <input id="roomId" placeholder="輸入房間代碼" class="input mb-2" />
-    <button id="joinBtn" class="btn">加入會議</button>
+    <h1 class="text-4xl font-bold mb-4">🌀 Philo Meet</h1>
+    <input type="text" id="username" placeholder="輸入暱稱" class="border p-2 rounded mb-4">
+    <button id="joinBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">加入會議</button>
   </div>
 
-  <div id="meeting-screen" class="hidden h-screen">
-    <div class="flex flex-col h-full">
-      <div class="flex-1 grid grid-cols-2 gap-2 p-4" id="videos"></div>
-      <div class="chat-container">
-        <div id="chat-box" class="chat-box"></div>
-        <input id="chat-input" placeholder="輸入訊息..." class="chat-input" />
-      </div>
+  <div id="meeting-screen" class="hidden h-screen flex flex-col">
+    <div id="videos" class="flex-1 flex flex-wrap p-4 gap-4 overflow-auto"></div>
+    <div id="chat-container" class="h-1/6 bg-white border-t p-2 overflow-y-auto">
+      <div id="messages" class="space-y-1 text-sm"></div>
+      <input type="text" id="messageInput" placeholder="輸入訊息..." class="border w-full mt-2 p-1 rounded">
     </div>
   </div>
-
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="script.js"></script>
 </body>
 </html>
